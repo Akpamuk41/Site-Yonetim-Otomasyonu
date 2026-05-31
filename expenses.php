@@ -1,5 +1,8 @@
 <?php
 require_once "includes/db.php";
+require_once "includes/auth.php";
+require_once "includes/functions.php";
+requireAdmin();
 
 $search = isset($_GET['search']) ? trim($_GET['search']) : "";
 

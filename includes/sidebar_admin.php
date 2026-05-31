@@ -62,6 +62,10 @@
                 <span class="nav-icon"><i class="fa-solid fa-user-plus"></i></span>
                 <span class="nav-text">Sakin Kullanıcı Ekle</span>
             </a>
+            <a class="nav-link <?php echo activePage('announcements.php'); ?>" href="announcements.php">
+                <span class="nav-icon"><i class="fa-solid fa-bullhorn"></i></span>
+                <span class="nav-text">Duyurular</span>
+            </a>
         </div>
 
         <div style="margin-top:auto; padding-top:16px; border-top:1px solid rgba(255,255,255,0.1);">

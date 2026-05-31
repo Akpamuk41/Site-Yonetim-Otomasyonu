@@ -38,6 +38,9 @@ $payments = $conn->prepare("SELECT p.* FROM payments p
 $payments->execute([$resident['apartment_id'] ?? 0]);
 $payments = $payments->fetchAll(PDO::FETCH_ASSOC);
 
+// Aktif duyurular
+$activeAnnouncements = $conn->query("SELECT * FROM announcements WHERE is_active = 1 ORDER BY created_at DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
+
 require_once "../includes/header_resident.php";
 ?>
 
@@ -126,6 +129,37 @@ require_once "../includes/header_resident.php";
                 <?php endif; ?>
             </div>
         </div>
+
+        <?php if(count($activeAnnouncements) > 0): ?>
+        <div class="panel" style="margin-top:22px;">
+            <h2><i class="fa-solid fa-bullhorn" style="color:#2563eb; margin-right:8px;"></i>Duyurular</h2>
+            <div class="panel-subtitle">Site yönetiminden güncel bildirimler</div>
+            <div class="list-box" style="margin-top:12px;">
+                <?php foreach($activeAnnouncements as $a):
+                    $borderColor = $a['priority'] == 'acil' ? '#ef4444' : ($a['priority'] == 'onemli' ? '#f59e0b' : '#3b82f6');
+                    $priorityLabel = ['normal' => 'Normal', 'onemli' => 'Önemli', 'acil' => 'Acil'][$a['priority']];
+                    $priorityBg = ['normal' => '#dbeafe', 'onemli' => '#fef3c7', 'acil' => '#fee2e2'][$a['priority']];
+                    $priorityColor = ['normal' => '#1d4ed8', 'onemli' => '#92400e', 'acil' => '#991b1b'][$a['priority']];
+                ?>
+                    <div class="complaint-card" style="border-left-color:<?php echo $borderColor; ?>;">
+                        <div class="complaint-header">
+                            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                                <div class="complaint-title" style="font-size:18px;"><?php echo htmlspecialchars($a['title']); ?></div>
+                                <span class="badge" style="background:<?php echo $priorityBg; ?>; color:<?php echo $priorityColor; ?>;"><?php echo $priorityLabel; ?></span>
+                            </div>
+                        </div>
+                        <div class="meta-row">
+                            <div class="meta-item">📅 <?php echo date('d.m.Y H:i', strtotime($a['created_at'])); ?></div>
+                        </div>
+                        <div class="description-box"><?php echo nl2br(htmlspecialchars($a['content'])); ?></div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <div style="margin-top:14px; text-align:right;">
+                <a href="announcements.php" class="btn" style="font-size:13px; padding:8px 16px;">Tüm Duyurular</a>
+            </div>
+        </div>
+        <?php endif; ?>
 
         <?php if(count($complaints) > 0): ?>
         <div class="panel" style="margin-top:22px;">

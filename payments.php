@@ -1,5 +1,8 @@
 <?php
 require_once "includes/db.php";
+require_once "includes/auth.php";
+require_once "includes/functions.php";
+requireAdmin();
 
 // v_payment_details VIEW kullanimi (VTYS projesi gereksinimi)
 $sql = "SELECT 
